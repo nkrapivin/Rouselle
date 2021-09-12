@@ -1,0 +1,29 @@
+{
+	"manifest_version": 2,
+	"name": "Rouselle",
+	"description": "Allows you to run games made with the Feature TBA export in any browser.",
+	"author": "nkrapivindev",
+	"version": "1.0",
+	"icons": {
+		"128": "nik_pets_icon128.png",
+		"96": "nik_pets_icon96.png",
+		"48": "nik_pets_icon48.png",
+		"16": "nik_pets_icon16.png"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"all_frames": true,
+			"match_about_blank": true,
+			"js": [
+				"nik_pets.js"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"web_accessible_resources": [
+		"nik_pets_stage2.js"
+	]
+}
