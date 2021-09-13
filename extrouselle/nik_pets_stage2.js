@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.0
+ * v1.1
  * 
- * Last Modified: 12 Sep 2021 (20:10 UTC+5)
+ * Last Modified: 13 Sep 2021 (18:56 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -21,19 +21,13 @@ const nik_pets_REPLY = { hash: [ 185, 66, 169, 195, 1, 196, 6, 209, 109, 32, 69,
  */
 function nik_pets_Stub(idString, msgObject, responseFunc) {
 	console.log("nik_pets_Stub(): STUB IS CALLED?!");
-	return false;
+	// TODO: pass back to the `browser` namespace maybe?
 }
 
-if (typeof(chrome) === "undefined" || typeof(chrome.runtime) === "undefined" || typeof(chrome.runtime.sendMessage) === "undefined") {
-	console.log("nik_pets: Making fake chrome variable...");
-	// TODO: UGLY HACK
-	var chrome = {
-		runtime: {
-			sendMessage: nik_pets_Stub,
-			lastError: undefined
-		}
-	};
-}
+// ensure chrome variable on firefox.
+if (typeof(chrome) === "undefined") var chrome = {};
+if (typeof(chrome.runtime) === "undefined") chrome.runtime = {};
+if (typeof(chrome.runtime.sendMessage) === "undefined") chrome.runtime.sendMessage = nik_pets_Stub;
 
 let nik_pets_Original = chrome.runtime.sendMessage;
 let nik_pets_ReplaceOrig = window.location.replace;
@@ -56,7 +50,7 @@ function nik_pets_Reply(rpFunction) {
 function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 	if (idString === "mpojjmidmnpcpopbebmecmjdkdbgdeke") {
 		console.log("nik_pets_SendMessageHook(): Hooking response.");
-		setTimeout(nik_pets_Reply, 10, responseFunc);
+		setTimeout(nik_pets_Reply, 0, responseFunc);
 		return true;
 	}
 	else {
@@ -71,7 +65,7 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
  */
 function nik_pets_ReplaceHook(domString) {
 	// DOMString -> string
-	if (domString.toString().includes("opera.com")) {
+	if (domString.toString().includes("https://opera.com/gx")) {
 		// Yo-Kai Watch - Space Dance! below:
 		console.log("bruh begin:");
 		console.log("bongo bongo sh sh sh sh sh");
@@ -91,6 +85,7 @@ function nik_pets_ReplaceHook(domString) {
 }
 
 chrome.runtime.sendMessage = nik_pets_SendMessageHook;
+// TODO: figure out a way to hook window.location.replace
 //Object.defineProperty(window.location, 'replace', { value: nik_pets_ReplaceHook, writable: false });
 //window.location.replace = nik_pets_ReplaceHook;
 

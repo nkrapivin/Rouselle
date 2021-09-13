@@ -3,7 +3,7 @@
 	"name": "Rouselle",
 	"description": "Allows you to run games made with the Feature TBA export in any browser.",
 	"author": "nkrapivindev",
-	"version": "1.0",
+	"version": "1.1",
 	"icons": {
 		"128": "nik_pets_icon128.png",
 		"96": "nik_pets_icon96.png",
@@ -24,6 +24,7 @@
 		}
 	],
 	"web_accessible_resources": [
-		"nik_pets_stage2.js"
+		"nik_pets_stage2.js",
+		"nik_pets_fucktimebomb.js"
 	]
 }
