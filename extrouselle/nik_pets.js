@@ -1,9 +1,9 @@
 // nik_pets.js
 /****
  * == Rouselle (Content Script) ==
- * v1.1
+ * v1.2
  * 
- * Last Modified: 13 Sep 2021 (18:57 UTC+5)
+ * Last Modified: 17 Sep 2021 (13:23 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -31,7 +31,12 @@ function nik_pets_Init() {
 	let nik_pets_target = document.getElementsByClassName("game-container")[0];
 	if (typeof(nik_pets_target) === "undefined") {
 		// index.html, very awful, this name is very common:
-		nik_pets_target = document.getElementById("progress");
+		nik_pets_target = document.getElementsByClassName("emscripten")[1];
+		// [1] because there are two elements that have this class name
+		// we want the second one.
+		if (typeof(nik_pets_target) === "undefined") {
+			// TODO: find more elements somehow?
+		}
 	}
 
 	// -- trolling -- //
@@ -39,14 +44,14 @@ function nik_pets_Init() {
 		try {
 			nik_pets_target.appendChild(nik_pets_elem);
 			nik_pets_target.appendChild(nik_pets_timebombelem);
-			console.log("nik_pets: Injected.");
+			console.log("nik_pets: Injected OK.");
 		}
 		catch (nik_pets_exc) {
-			// ignore errors.
+			console.log("nik_pets: An error when injecting, ignoring.");
 		}
 	}
 	else {
-		console.log("nik_pets: Injection failed, not a game page?");
+		// console.log("nik_pets: Injection failed, not a game page?");
 	}
 }
 

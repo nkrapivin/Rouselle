@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.1
+ * v1.2
  * 
- * Last Modified: 13 Sep 2021 (18:56 UTC+5)
+ * Last Modified: 17 Sep 2021 (13:21 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -84,9 +84,16 @@ function nik_pets_ReplaceHook(domString) {
 	}
 }
 
-chrome.runtime.sendMessage = nik_pets_SendMessageHook;
-// TODO: figure out a way to hook window.location.replace
-//Object.defineProperty(window.location, 'replace', { value: nik_pets_ReplaceHook, writable: false });
-//window.location.replace = nik_pets_ReplaceHook;
+/**
+ * Initializes the second stage.
+ */
+function nik_pets_Stage2Init() {
+	chrome.runtime.sendMessage = nik_pets_SendMessageHook;
+	// TODO: figure out a way to hook window.location.replace:
+	//Object.defineProperty(window.location, 'replace', { value: nik_pets_ReplaceHook, writable: false });
+	//window.location.replace = nik_pets_ReplaceHook;
+	console.log("nik_pets_Stage2Init(): Stage 2 Init.");
+}
 
-// we're done here.
+// -- the entry point is here -- //
+nik_pets_Stage2Init();
