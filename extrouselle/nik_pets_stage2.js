@@ -64,10 +64,29 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 			console.log("nik_pets_SendMessageHook(): New reply.");
 			setTimeout(nik_pets_ReplyProduct, 0, responseFunc);
 		}
-		else {
+		else if (msgObject.command === "openURL") {
+			console.log("nik_pets_SendMessageHook(): Trying to open the game.");
+			// passed by gxc.gg:
+			let nik_pets_w = msgObject.size.width;
+			let nik_pets_h = msgObject.size.height;
+			// calculated by us:
+			let nik_pets_x = screen.availWidth/2 - nik_pets_w/2;
+			let nik_pets_y = screen.availHeight/2 - nik_pets_h/2;
+			// `fullscreen` may or may not work, you never know ;-;
+			window.open(msgObject.url, "_blank", "fullscreen=yes,left=" + nik_pets_x + ",top=" + nik_pets_y + ",width=" + nik_pets_w + ",height=" + nik_pets_h);
+			return false; // no need to reply to anything.
+		}
+		else if (msgObject.command === "authenticate") {
 			console.log("nik_pets_SendMessageHook(): Legacy reply. " + msgObject.command);
 			setTimeout(nik_pets_Reply, 0, responseFunc);
 		}
+		else {
+			console.log("nik_pets_SendMessageHook(): UNKNOWN COMMAND PASSED = " + msgObject.command);
+			console.log(msgObject);
+			alert("PLEASE SEE THE BROWSER CONSOLE!");
+			return false;
+		}
+		
 		return true;
 	}
 	else {
