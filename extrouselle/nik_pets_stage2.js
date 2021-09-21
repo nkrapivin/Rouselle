@@ -12,6 +12,7 @@
 
 // -- change when it gets fixed LOL -- //
 const nik_pets_REPLY = { hash: [ 185, 66, 169, 195, 1, 196, 6, 209, 109, 32, 69, 100, 5, 236, 130, 37, 162, 86, 183, 235 ] };
+const nik_pets_REPLY_PRODUCT = { product: "Opera GX" };
 
 /**
  * A stub sendMessage that does nothing.
@@ -42,6 +43,15 @@ function nik_pets_Reply(rpFunction) {
 }
 
 /**
+ * A function that replies to the drm product auth.
+ * @param {function} rpFunction - Reply callback that gets the answer.
+ */
+function nik_pets_ReplyProduct(rpFunction) {
+	console.log("nik_pets_ReplyProduct(): Hi.");
+	rpFunction(nik_pets_REPLY_PRODUCT);
+}
+
+/**
  * A hook for sendMessage.
  * @param {string} idString - id of the extension.
  * @param {object} msgObject - message object.
@@ -50,7 +60,14 @@ function nik_pets_Reply(rpFunction) {
 function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 	if (idString === "mpojjmidmnpcpopbebmecmjdkdbgdeke") {
 		console.log("nik_pets_SendMessageHook(): Hooking response.");
-		setTimeout(nik_pets_Reply, 0, responseFunc);
+		if (msgObject.command === "product") {
+			console.log("nik_pets_SendMessageHook(): New reply.");
+			setTimeout(nik_pets_ReplyProduct, 0, responseFunc);
+		}
+		else {
+			console.log("nik_pets_SendMessageHook(): Legacy reply. " + msgObject.command);
+			setTimeout(nik_pets_Reply, 0, responseFunc);
+		}
 		return true;
 	}
 	else {

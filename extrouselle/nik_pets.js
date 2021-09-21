@@ -28,6 +28,8 @@ function nik_pets_Init() {
 	nik_pets_timebombelem.src = nik_pets_runtime.runtime.getURL("nik_pets_fucktimebomb.js");
 	
 	// -- find game element -- //
+	
+	/*
 	let nik_pets_target = document.getElementsByClassName("game-container")[0];
 	if (typeof(nik_pets_target) === "undefined") {
 		// index.html, very awful, this name is very common:
@@ -53,6 +55,10 @@ function nik_pets_Init() {
 	else {
 		// console.log("nik_pets: Injection failed, not a game page?");
 	}
+	*/
+	
+	document.body.appendChild(nik_pets_elem);
+	document.body.appendChild(nik_pets_timebombelem);
 }
 
 // -- The entrypoint is here -- //
