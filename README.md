@@ -22,7 +22,7 @@ That means all Chromium-based browsers, and **modern** Firefox.
 
 To install, follow these steps:
 
-- Go to Releases.
+- Go to [Releases](https://github.com/nkrapivin/Rouselle/releases).
 - Download an xpi for Firefox, crx for Chromium-based ones.
 - Install the extension (try drag and dropping the file onto the browser window).
 - Restart your browser.
@@ -35,6 +35,8 @@ I know, sometimes this extension may not work, it may get patched.
 I'll try to update it asap though.
 
 Tested with runtime V9.9.1.2226, VM only. (too lazy to install the Emscripten SDK...)
+
+UPD: Dev version V1.3 also tested with https://test.gxc.gg/
 
 ## Who?
 
