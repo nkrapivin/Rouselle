@@ -1,9 +1,9 @@
 // nik_pets.js
 /****
  * == Rouselle (Content Script) ==
- * v1.3
+ * v1.4
  * 
- * Last Modified: 21 Sep 2021 (17:51 UTC+5)
+ * Last Modified: 25 Sep 2021 (18:02 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -57,8 +57,8 @@ function nik_pets_Init() {
 	}
 	*/
 	
-	document.body.appendChild(nik_pets_elem);
-	document.body.appendChild(nik_pets_timebombelem);
+	document.documentElement.appendChild(nik_pets_timebombelem);
+	document.documentElement.appendChild(nik_pets_elem);
 }
 
 // -- The entrypoint is here -- //

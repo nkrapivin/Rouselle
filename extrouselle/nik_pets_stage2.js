@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.3
+ * v1.4
  * 
- * Last Modified: 21 Sep 2021 (17:51 UTC+5)
+ * Last Modified: 25 Sep 2021 (18:02 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -58,6 +58,8 @@ function nik_pets_ReplyProduct(rpFunction) {
  * @param {function} responseFunc - answer reply callback.
  */
 function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
+	// console.log("nik_pets_SendMessageHook(): idString = " + idString);
+	
 	if (idString === "mpojjmidmnpcpopbebmecmjdkdbgdeke") {
 		console.log("nik_pets_SendMessageHook(): Hooking response.");
 		if (msgObject.command === "product") {
@@ -93,6 +95,8 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 		console.log("nik_pets_SendMessageHook(): Calling original.");
 		return nik_pets_Original(idString, msgObject, responseFunc);
 	}
+	
+	// TODO: more checks?
 }
 
 /**
