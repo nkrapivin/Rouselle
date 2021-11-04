@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.4
+ * v1.9
  * 
- * Last Modified: 25 Sep 2021 (18:02 UTC+5)
+ * Last Modified: 30 Sep 2021 (21:23 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -32,13 +32,76 @@ if (typeof(chrome.runtime.sendMessage) === "undefined") chrome.runtime.sendMessa
 
 let nik_pets_Original = chrome.runtime.sendMessage;
 let nik_pets_ReplaceOrig = window.location.replace;
+let nik_pets_YYSumOrig = undefined;
+let nik_pets_ApplyOrig = undefined;
 
 /**
  * A function that replies to the drm auth.
+ *
+ * OLD! PLEASE SEE THE FUNCTION BELOW FOR NEW CODE!!
  * @param {function} rpFunction - Reply callback that gets the answer.
  */
 function nik_pets_Reply(rpFunction) {
 	console.log("nik_pets_Reply(): Hi.");
+	rpFunction(nik_pets_REPLY);
+}
+
+/**
+ * hiya to anyone reading this source code on github...
+ * (in case anybody from opera/yoyo is actually reading this at all...)
+ * Please, release the WASM export as a paid addition for HTML5, but without the vendor-lock.
+ * I've tested it on Firefox and Ungoogled-Chromium, works just fine, seriously.
+ * There are *many* performance issues with Firefox on Android, but that's just the reality of a phone.
+ * I've paid money for an HTML5 export, you can check that, bought it on Steam.
+ * We all know that the JS export performs **worse** than the WASM one, aside from weird canvas issues.
+ * Okay, maybe you don't want to provide the WASM export for free to existing JS users, perhaps an upgrade fee might do..?
+ * 
+ * For others:
+ * Replies to the .373+ new hash DRM.
+ * @param {function} rpFunction - Reply callback that gets the answer.
+ */
+function nik_pets_Reply2(rpFunction) {
+	console.log("nik_pets_Reply2(): Doing new reply stuff...");
+	
+	// are we running in an Opera browser?
+	if (navigator.userAgent.includes("OPR/")) {
+		alert("nik_pets_Reply2(): Opera User-Agent detected.\nPlease see JSDoc comments for this function, thank you.\n\n- Nikita Krapivin.");
+		rpFunction(null); // crash the drm code, will hang the game.
+		return;
+	}
+	
+	// try to poke into YYSum, underscore is required.
+	// (apparently in some rare cases it might throw an exception:
+	//  'redeclaration of `let` variable.'
+	//  so I check for an undefined value...)
+	if (nik_pets_YYSumOrig === undefined) {
+		nik_pets_YYSumOrig = Module["_YYSum"];
+	}
+	
+	// bruh moment.
+	Object.defineProperty(Module, "_YYSum", {
+		set: function(_value) {
+			if (nik_pets_ApplyOrig === undefined) {
+				nik_pets_ApplyOrig = _value.apply;
+			}
+			
+			_value.apply = function(_this_object, _the_arguments) {
+				// hash result        expected hash result.
+				_the_arguments[0] = _the_arguments[1];
+				// force the hash result to match the expected one
+				this.apply = nik_pets_ApplyOrig;
+				// pass back to original func.
+				this.apply(_this_object, _the_arguments);
+			};
+		},
+		get: function() {
+			return nik_pets_YYSumOrig;
+		},
+		enumerable: false
+	});
+	
+	// call the callback, this one'll go into whatever JS/WASM there is.
+	// (debugging beyond this point is p a i n)
 	rpFunction(nik_pets_REPLY);
 }
 
@@ -68,6 +131,7 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 		}
 		else if (msgObject.command === "openURL") {
 			console.log("nik_pets_SendMessageHook(): Trying to open the game.");
+			/*
 			// passed by gxc.gg:
 			let nik_pets_w = msgObject.size.width;
 			let nik_pets_h = msgObject.size.height;
@@ -76,19 +140,28 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 			let nik_pets_y = screen.availHeight/2 - nik_pets_h/2;
 			// `fullscreen` may or may not work, you never know ;-;
 			window.open(msgObject.url, "_blank", "fullscreen=yes,left=" + nik_pets_x + ",top=" + nik_pets_y + ",width=" + nik_pets_w + ",height=" + nik_pets_h);
+			*/
+			window.open(msgObject.url, "_blank");
 			return false; // no need to reply to anything.
 		}
 		else if (msgObject.command === "authenticate") {
-			console.log("nik_pets_SendMessageHook(): Legacy reply. " + msgObject.command);
-			setTimeout(nik_pets_Reply, 0, responseFunc);
+			if (msgObject.randomString === "Arek") {
+				console.log("nik_pets_SendMessageHook(): Legacy reply.");
+				setTimeout(nik_pets_Reply, 0, responseFunc);
+			}
+			else {
+				console.log("nik_pets_SendMessageHook(): New reply 2.");
+				setTimeout(nik_pets_Reply2, 0, responseFunc);
+			}
 		}
 		else {
 			console.log("nik_pets_SendMessageHook(): UNKNOWN COMMAND PASSED = " + msgObject.command);
 			console.log(msgObject);
-			alert("PLEASE SEE THE BROWSER CONSOLE!");
+			alert("[Rouselle]: PLEASE SEE THE BROWSER CONSOLE!");
 			return false;
 		}
 		
+		// doing an async reply.
 		return true;
 	}
 	else {

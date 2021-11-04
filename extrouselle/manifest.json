@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "Rouselle",
-	"description": "Allows you to run games made with the Feature TBA export in any browser.",
+	"name": "Røuselle",
+	"description": "Allows you to run games made with the Opera GX export and use GXC in any browser.",
 	"author": "nkrapivindev",
-	"version": "1.4",
+	"version": "1.9",
 	"icons": {
 		"192": "nik_pets_icon192.png",
 		"128": "nik_pets_icon128.png",

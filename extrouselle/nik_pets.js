@@ -1,9 +1,9 @@
 // nik_pets.js
 /****
  * == Rouselle (Content Script) ==
- * v1.4
+ * v1.9
  * 
- * Last Modified: 25 Sep 2021 (18:02 UTC+5)
+ * Last Modified: 30 Sep 2021 (21:23 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -26,6 +26,9 @@ function nik_pets_Init() {
 	nik_pets_timebombelem.id = "nik_pets_script_timebomb_element";
 	nik_pets_timebombelem.className = "nik_pets_class";
 	nik_pets_timebombelem.src = nik_pets_runtime.runtime.getURL("nik_pets_fucktimebomb.js");
+	
+	
+	// -- TODO: does not work with gxc -- //
 	
 	// -- find game element -- //
 	
@@ -57,8 +60,9 @@ function nik_pets_Init() {
 	}
 	*/
 	
-	document.documentElement.appendChild(nik_pets_timebombelem);
+	// -- inject into the whole document at start -- //
 	document.documentElement.appendChild(nik_pets_elem);
+	document.documentElement.appendChild(nik_pets_timebombelem);
 }
 
 // -- The entrypoint is here -- //

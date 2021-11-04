@@ -1,9 +1,9 @@
 // nik_pets_fucktimebomb.js
 /****
  * == Rouselle (Timebomb Patcher) ==
- * v1.4
+ * v1.9
  * 
- * Last Modified: 25 Sep 2021 (18:02 UTC+5)
+ * Last Modified: 30 Sep 2021 (21:23 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -132,7 +132,7 @@ function nik_pets_PatchTimebomb(bytearr) {
 	let v_temp = BigInt(v_infoNumber);
 	// here huge values are hex strings because JS can't represent some huge bitmasks :/
 	v_temp =
-		((v_temp << BigInt(56)) & BigInt("0xff00000000000000"))
+	    ((v_temp << BigInt(56)) & BigInt("0xff00000000000000"))
 	  | ((v_temp >> BigInt( 8)) & BigInt("0xff000000000000"  ))
 	  | ((v_temp << BigInt(32)) & BigInt("0xff0000000000"    ))
 	  | ((v_temp >> BigInt(16)) & BigInt("0xff00000000"      ))
@@ -159,11 +159,11 @@ function nik_pets_PatchTimebomb(bytearr) {
 	v_infoLocation %= BigInt(4);
 	
 	// first pos always firstrandom.
-	v_ids[0] = v_firstRandom;
+	v_ids[0] = BigInt(v_firstRandom);
 	
 	// array loop.
 	for (let i = 0; i < 4; ++i) {
-		if (BigInt(i) == v_infoLocation) {
+		if (BigInt(i) == BigInt(v_infoLocation)) {
 			// write v_infoNumber
 			v_ids[1 + i] = BigInt(v_infoNumber);
 			continue;
@@ -204,11 +204,14 @@ function nik_pets_FS_createDataFile(parent, name, data, canRead, canWrite, canOw
 function nik_pets_OnLoad() {
 	if (typeof(Module) !== "undefined" && typeof(Module.FS_createDataFile) !== "undefined") {
 		console.log("nik_pets_OnLoad(): Hooking module.");
-		nik_pets_FS_Orig = Module.FS_createDataFile;
+		if (nik_pets_FS_Orig === undefined) {
+			nik_pets_FS_Orig = Module.FS_createDataFile;
+		}
 		Module.FS_createDataFile = nik_pets_FS_createDataFile;
 	}
 	else {
-		console.log("nik_pets_OnLoad(): Wtf?");
+		// console.log("nik_pets_OnLoad(): Wtf?");
+		// not a GM game page...
 	}
 }
 
@@ -226,7 +229,7 @@ function nik_pets_XhrOpenHook() {
  */
 function nik_pets_TimeBombPatcherInit() {
 	XMLHttpRequest.prototype.open = nik_pets_XhrOpenHook;
-	console.log("nik_pets_TimeBombPatcherInit(): XHR Open hooked.");
+	// console.log("nik_pets_TimeBombPatcherInit(): XHR Open hooked.");
 }
 
 // -- the entry point is here -- //
