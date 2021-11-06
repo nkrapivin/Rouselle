@@ -32,9 +32,17 @@ To install, follow these (I hope) simple steps:
 - Restart your browser.
 - Try running an Opera GX export game, no more shitty redirects or nags about Opera GX!
 
+If you're using Chrome for Windows, it might reject the extension's .crx, if it does so:
+- Download this repo as a zip `Code -> Download ZIP` or `Source code (zip)` from [Releases](https://github.com/nkrapivin/Rouselle/releases).
+- Open the Extensions window in Chrome
+- Enable "Developer Mode" ("Режим разработчика" in Russian)
+- Choose "Load Unpacked Extension" ("Загрузить распакованное расширение" in Russian)
+- Select the "extrouselle" folder
+- Notice that a new extension has been loaded, do not delete the "extrouselle" folder or else the extension will be gone.
+
 ## Wait, gxc.gg is... pop-ups...??
 
-Yeah, gxc.gg games run in fullscreen only. (as for `26.09.2021 14:22 UTC+5`)
+Yeah, gxc.gg games run in fullscreen only. (as of `26.09.2021 14:22 UTC+5`)
 
 It's using a hidden feature in the secret Opera GX bg worker, which ignores all Chromium security policies.
 
@@ -84,9 +92,13 @@ UPD: Dev version V1.3 also tested with https://test.gxc.gg/
 
 UPD 2: Dev version V1.4 also tested with https://dc.gxc.gg/ and the private game tracks.
 
+UPD 3: Versions V1.9 and above are able to replicate the new DRM check.
+
+UPD 4: Versions V1.99 and above can close the current game window.
+
 ## Who?
 
 Credits:
 
 - Nikita Krapivin - funny trolling.
-- Anonymous citizen - an idea for the extension's icon.
+- Anonymous citizen - an idea for the extension's (old) icon.
