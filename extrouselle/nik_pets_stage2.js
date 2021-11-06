@@ -1,16 +1,16 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.9
+ * v1.99
  * 
- * Last Modified: 30 Sep 2021 (21:23 UTC+5)
+ * Last Modified: 06 Nov 2021 (18:06 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
 
-// -- change when it gets fixed LOL -- //
+// -- only used for old auth flow LOL -- //
 const nik_pets_REPLY = { hash: [ 185, 66, 169, 195, 1, 196, 6, 209, 109, 32, 69, 100, 5, 236, 130, 37, 162, 86, 183, 235 ] };
 const nik_pets_REPLY_PRODUCT = { product: "Opera GX" };
 
@@ -34,6 +34,7 @@ let nik_pets_Original = chrome.runtime.sendMessage;
 let nik_pets_ReplaceOrig = window.location.replace;
 let nik_pets_YYSumOrig = undefined;
 let nik_pets_ApplyOrig = undefined;
+let nik_pets_Closed = 0;
 
 /**
  * A function that replies to the drm auth.
@@ -115,6 +116,23 @@ function nik_pets_ReplyProduct(rpFunction) {
 }
 
 /**
+ * Tries to close the current window.
+ * @returns {bool} always false, just as a shortcut.
+ */
+function nik_pets_CloseTabHandler() {
+	console.log("nik_pets_CloseTabHandler(): Trying to close the window.");
+	// if you have a better method of closing the current tab, implement it here!
+	window.close();
+	// uh, this function was called.. again??
+	if (nik_pets_Closed == 2) {
+		alert("The game wants to close it's own tab, if you see this message, close the tab manually.");
+	}
+	// increment the "how many times a .close() call was attempted" counter :p because browsers are silly
+	++nik_pets_Closed;
+	return false;
+}
+
+/**
  * A hook for sendMessage.
  * @param {string} idString - id of the extension.
  * @param {object} msgObject - message object.
@@ -153,6 +171,9 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 				console.log("nik_pets_SendMessageHook(): New reply 2.");
 				setTimeout(nik_pets_Reply2, 0, responseFunc);
 			}
+		}
+		else if (msgObject.command === "closeTab") {
+			return nik_pets_CloseTabHandler();
 		}
 		else {
 			console.log("nik_pets_SendMessageHook(): UNKNOWN COMMAND PASSED = " + msgObject.command);
