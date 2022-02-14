@@ -1,9 +1,9 @@
 // nik_pets_fucktimebomb.js
 /****
  * == Rouselle (Timebomb Patcher) ==
- * v1.99
+ * v2.0
  * 
- * Last Modified: 06 Nov 2021 (18:06 UTC+5)
+ * Last Modified: 14 Feb 2022 (10:06 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */

@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v1.99
+ * v2.0
  * 
- * Last Modified: 06 Nov 2021 (18:06 UTC+5)
+ * Last Modified: 14 Feb 2022 (10:06 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -32,8 +32,6 @@ if (typeof(chrome.runtime.sendMessage) === "undefined") chrome.runtime.sendMessa
 
 let nik_pets_Original = chrome.runtime.sendMessage;
 let nik_pets_ReplaceOrig = window.location.replace;
-let nik_pets_YYSumOrig = undefined;
-let nik_pets_ApplyOrig = undefined;
 let nik_pets_Closed = 0;
 
 /**
@@ -48,20 +46,46 @@ function nik_pets_Reply(rpFunction) {
 }
 
 /**
- * hiya to anyone reading this source code on github...
- * (in case anybody from opera/yoyo is actually reading this at all...)
- * Please, release the WASM export as a paid addition for HTML5, but without the vendor-lock.
- * I've tested it on Firefox and Ungoogled-Chromium, works just fine, seriously.
- * There are *many* performance issues with Firefox on Android, but that's just the reality of a phone.
- * I've paid money for an HTML5 export, you can check that, bought it on Steam.
- * We all know that the JS export performs **worse** than the WASM one, aside from weird canvas issues.
- * Okay, maybe you don't want to provide the WASM export for free to existing JS users, perhaps an upgrade fee might do..?
+ * Converts an ASCII string to an array.
+ *
+ * @param {string} inputString ASCII String
+ * @returns {Uint8Array} of bytes
+ */
+function nik_pets_StringToArray(inputString) {
+    let res = new Uint8Array(inputString.length);
+    
+    for (let i = 0; i < res.length; ++i) {
+        // I know it's very awful and won't support Unicode
+        // gladly we don't need it.
+        res[i] = (inputString.charCodeAt(i) & 0xFF);
+    }
+    
+    return res;
+}
+
+/**
+ * Handler for the SHA-1 digest event.
+ *
+ * @param {ArrayBuffer} promiseResultArrayBuffer the SHA-1 hash.
+ * @param {function} rpFunction callback into GameMaker.
+ */
+function nik_pets_Reply2Handler(promiseResultArrayBuffer, rpFunction) {
+    console.log("nik_pets_Reply2Handler(): inside a promise... (fuck NFTs and Web3 btw)");
+    console.log(promiseResultArrayBuffer);
+    rpFunction({ hash: promiseResultArrayBuffer });
+}
+
+/**
+ * Alright Opera, you did not listen, your fault, have fun.
+ * You had one job, release the OGX export properly, you've fucked up.
+ * You really wanna continue this silly fight?
  * 
  * For others:
- * Replies to the .373+ new hash DRM.
+ * Replies to the DRM thing.
  * @param {function} rpFunction - Reply callback that gets the answer.
+ * @param {object} inputData - screw Opera tbh.
  */
-function nik_pets_Reply2(rpFunction) {
+function nik_pets_Reply2(rpFunction, inputData) {
 	console.log("nik_pets_Reply2(): Doing new reply stuff...");
 	
 	// are we running in an Opera browser?
@@ -71,39 +95,8 @@ function nik_pets_Reply2(rpFunction) {
 		return;
 	}
 	
-	// try to poke into YYSum, underscore is required.
-	// (apparently in some rare cases it might throw an exception:
-	//  'redeclaration of `let` variable.'
-	//  so I check for an undefined value...)
-	if (nik_pets_YYSumOrig === undefined) {
-		nik_pets_YYSumOrig = Module["_YYSum"];
-	}
-	
-	// bruh moment.
-	Object.defineProperty(Module, "_YYSum", {
-		set: function(_value) {
-			if (nik_pets_ApplyOrig === undefined) {
-				nik_pets_ApplyOrig = _value.apply;
-			}
-			
-			_value.apply = function(_this_object, _the_arguments) {
-				// hash result        expected hash result.
-				_the_arguments[0] = _the_arguments[1];
-				// force the hash result to match the expected one
-				this.apply = nik_pets_ApplyOrig;
-				// pass back to original func.
-				this.apply(_this_object, _the_arguments);
-			};
-		},
-		get: function() {
-			return nik_pets_YYSumOrig;
-		},
-		enumerable: false
-	});
-	
-	// call the callback, this one'll go into whatever JS/WASM there is.
-	// (debugging beyond this point is p a i n)
-	rpFunction(nik_pets_REPLY);
+    window.crypto.subtle.digest("SHA-1", nik_pets_StringToArray(inputData.randomString + "QXyd2ZCu88ec3J0X"))
+    .then(nik_pets_res => nik_pets_Reply2Handler(nik_pets_res, rpFunction));
 }
 
 /**
@@ -120,6 +113,11 @@ function nik_pets_ReplyProduct(rpFunction) {
  * @returns {bool} always false, just as a shortcut.
  */
 function nik_pets_CloseTabHandler() {
+    // closing a bit too much...
+    if (nik_pets_Closed >= 4) {
+        return false;
+    }
+    // .........
 	console.log("nik_pets_CloseTabHandler(): Trying to close the window.");
 	// if you have a better method of closing the current tab, implement it here!
 	window.close();
@@ -142,7 +140,7 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 	// console.log("nik_pets_SendMessageHook(): idString = " + idString);
 	
 	if (idString === "mpojjmidmnpcpopbebmecmjdkdbgdeke") {
-		console.log("nik_pets_SendMessageHook(): Hooking response.");
+		// console.log("nik_pets_SendMessageHook(): Hooking response.");
 		if (msgObject.command === "product") {
 			console.log("nik_pets_SendMessageHook(): New reply.");
 			setTimeout(nik_pets_ReplyProduct, 0, responseFunc);
@@ -169,7 +167,8 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 			}
 			else {
 				console.log("nik_pets_SendMessageHook(): New reply 2.");
-				setTimeout(nik_pets_Reply2, 0, responseFunc);
+                // do not use setTimeout() as it'll call into a Promise()
+				nik_pets_Reply2(responseFunc, msgObject);
 			}
 		}
 		else if (msgObject.command === "closeTab") {
