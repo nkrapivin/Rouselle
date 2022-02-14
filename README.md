@@ -34,13 +34,18 @@ To install, follow these (I hope) simple steps:
 
 If you're using Chrome for Windows, it might reject the extension's .crx, if it does so:
 - Download this repo as a zip `Code -> Download ZIP` or `Source code (zip)` from [Releases](https://github.com/nkrapivin/Rouselle/releases).
-- Open the Extensions window in Chrome
-- Enable "Developer Mode" ("Режим разработчика" in Russian)
+- Open the Extensions manager in Chrome
+- Enable "Developer Mode" at the top ("Режим разработчика" in Russian)
 - Choose "Load Unpacked Extension" ("Загрузить распакованное расширение" in Russian)
 - Select the "extrouselle" folder
-- Notice that a new extension has been loaded, do not delete the "extrouselle" folder or else the extension will be gone.
+- Notice that a new extension has been loaded, **do not delete the "extrouselle" folder or else the extension will be gone!**
+- You may want to allow this extension to run in Incognito Mode, or not, up to you.
+- *Keep in mind that if you open GXC in Incognito but extension can't run in Incognito, the DRM WILL NOT be fooled.*
+- Fuck NFTs. Fuck Web3. (kitty ->) 🐈‍ (<- kitty)
 
 ## Wait, gxc.gg is... pop-ups...??
+
+**UPD: Since 2022 GXC games do not run in pop-ups by default.**
 
 Yeah, gxc.gg games run in fullscreen only. (as of `26.09.2021 14:22 UTC+5`)
 
@@ -96,9 +101,18 @@ UPD 3: Versions V1.9 and above are able to replicate the new DRM check.
 
 UPD 4: Versions V1.99 and above can close the current game window.
 
+UPD 5: Version V2.00 and above should bypass the new DRM check (2022+).
+
 ## Who?
 
 Credits:
 
 - Nikita Krapivin - funny trolling.
 - Anonymous citizen - an idea for the extension's (old) icon.
+- Opera - destroying their own reputation like I could never do (crypto browser amirite).
+
+## Post Scriptum
+
+How to make your product truly uncrackable?
+
+Don't do any copy protection. It's that simple, idiots.
