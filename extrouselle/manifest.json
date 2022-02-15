@@ -14,14 +14,15 @@
 	"content_scripts": [
 		{
 			"matches": [
-                "*://*.gxc.gg:*/*",
-                "*://*.gmx.dev:*/*",
-                "*://*.localhost:*/*",
-                "*://*.itch.io:*/*",
-                "*://*.gamejolt.com:*/*"
+				"*://*.gxc.gg:*/*",
+				"*://*.gmx.dev:*/*",
+				"*://*.localhost:*/*",
+				"*://*.itch.io:*/*",
+				"*://*.gamejolt.com:*/*",
+				"*://*.hwcdn.net:*/*"
 			],
 			"all_frames": true,
-            "run_at": "document_start",
+			"run_at": "document_start",
 			"js": [
 				"nik_pets.js"
 			]
