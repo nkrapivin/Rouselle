@@ -1,16 +1,23 @@
 // nik_pets_fucktimebomb.js
 /****
  * == Rouselle (Timebomb Patcher) ==
- * v2.0
+ * v2.1
  * 
- * Last Modified: 14 Feb 2022 (10:06 UTC+5)
+ * Last Modified: 21 Mar 2022 (06:10 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
 
+(function() { // -- wrap in a function to allow to cancel init (see if below) -- //
+
 // -- very cursed code below -- //
+
+if (typeof(nik_pets_TimeBombPatcherInit) !== "undefined") {
+    console.log("nik_pets_fucktimebomb.js: Already initialised.");
+    return false;
+}
 
 let nik_pets_XhrOpenOrig = XMLHttpRequest.prototype.open;
 let nik_pets_FS_Orig = undefined;
@@ -234,3 +241,7 @@ function nik_pets_TimeBombPatcherInit() {
 
 // -- the entry point is here -- //
 nik_pets_TimeBombPatcherInit();
+return true;
+
+})();
+

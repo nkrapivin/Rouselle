@@ -1,14 +1,21 @@
 // nik_pets.js
 /****
  * == Rouselle (Content Script) ==
- * v2.0
+ * v2.1
  * 
- * Last Modified: 14 Feb 2022 (10:06 UTC+5)
+ * Last Modified: 21 Mar 2022 (06:10 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
+
+(function() { // -- wrap in a function to allow to cancel init (see if below) -- //
+
+if (typeof(nik_pets_Init) !== "undefined") {
+    console.log("nik_pets.js: Already initialised.");
+    return false;
+}
 
 /**
  * Initializes the extension.
@@ -67,3 +74,8 @@ function nik_pets_Init() {
 
 // -- The entrypoint is here -- //
 nik_pets_Init();
+return true;
+
+})();
+
+

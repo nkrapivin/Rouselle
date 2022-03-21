@@ -1,14 +1,21 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v2.0
+ * v2.1
  * 
- * Last Modified: 14 Feb 2022 (10:06 UTC+5)
+ * Last Modified: 21 Mar 2022 (06:10 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
+
+(function() { // -- wrap in a function to allow to cancel init (see if below) -- //
+
+if (typeof(nik_pets_Stage2Init) !== "undefined") {
+    console.log("nik_pets_stage2.js: Already initialised.");
+    return false;
+}
 
 // -- only used for old auth flow LOL -- //
 const nik_pets_REPLY = { hash: [ 185, 66, 169, 195, 1, 196, 6, 209, 109, 32, 69, 100, 5, 236, 130, 37, 162, 86, 183, 235 ] };
@@ -230,3 +237,7 @@ function nik_pets_Stage2Init() {
 
 // -- the entry point is here -- //
 nik_pets_Stage2Init();
+return true;
+
+})();
+

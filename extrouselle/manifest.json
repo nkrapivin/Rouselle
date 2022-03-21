@@ -3,7 +3,7 @@
 	"name": "Røuselle",
 	"description": "Allows you to run games made with the Opera GX export and use GXC in any browser.",
 	"author": "nkrapivindev",
-	"version": "2.0",
+	"version": "2.1",
 	"icons": {
 		"192": "nik_pets_icon192.png",
 		"128": "nik_pets_icon128.png",
@@ -14,15 +14,16 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*.gxc.gg:*/*",
-				"*://*.gmx.dev:*/*",
-				"*://*.localhost:*/*",
-				"*://*.itch.io:*/*",
-				"*://*.gamejolt.com:*/*",
-				"*://*.hwcdn.net:*/*"
+                "*://*.gxc.gg:*/*",
+                "*://*.gmx.dev:*/*",
+                "*://*.localhost:*/*",
+                "*://*.itch.io:*/*",
+                "*://*.gamejolt.com:*/*",
+                "*://*.newgrounds.com:*/*",
+                "*://*.ungrounded.net:*/*"
 			],
 			"all_frames": true,
-			"run_at": "document_start",
+            "run_at": "document_start",
 			"js": [
 				"nik_pets.js"
 			]
