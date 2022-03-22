@@ -1,9 +1,9 @@
 // nik_pets.js
 /****
  * == Rouselle (Content Script) ==
- * v2.1
+ * v2.2
  * 
- * Last Modified: 21 Mar 2022 (06:10 UTC+5)
+ * Last Modified: 22 Mar 2022 (20:45 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */

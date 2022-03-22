@@ -1,9 +1,9 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v2.1
+ * v2.2
  * 
- * Last Modified: 21 Mar 2022 (06:10 UTC+5)
+ * Last Modified: 22 Mar 2022 (20:45 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
@@ -96,11 +96,14 @@ function nik_pets_Reply2(rpFunction, inputData) {
 	console.log("nik_pets_Reply2(): Doing new reply stuff...");
 	
 	// are we running in an Opera browser?
+    // -_-
+    /*
 	if (navigator.userAgent.includes("OPR/")) {
 		alert("nik_pets_Reply2(): Opera User-Agent detected.\nPlease see JSDoc comments for this function, thank you.\n\n- Nikita Krapivin.");
 		rpFunction(null); // crash the drm code, will hang the game.
 		return;
 	}
+    */
 	
     window.crypto.subtle.digest("SHA-1", nik_pets_StringToArray(inputData.randomString + "QXyd2ZCu88ec3J0X"))
     .then(nik_pets_res => nik_pets_Reply2Handler(nik_pets_res, rpFunction));
