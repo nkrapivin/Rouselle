@@ -1,23 +1,16 @@
 // nik_pets_fucktimebomb.js
 /****
  * == Rouselle (Timebomb Patcher) ==
- * v2.2
+ * v2.3
  * 
- * Last Modified: 22 Mar 2022 (20:45 UTC+5)
+ * Last Modified: 13 Jun 2022 (18:48 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
 
-(function() { // -- wrap in a function to allow to cancel init (see if below) -- //
-
 // -- very cursed code below -- //
-
-if (typeof(nik_pets_TimeBombPatcherInit) !== "undefined") {
-    console.log("nik_pets_fucktimebomb.js: Already initialised.");
-    return false;
-}
 
 let nik_pets_XhrOpenOrig = XMLHttpRequest.prototype.open;
 let nik_pets_FS_Orig = undefined;
@@ -131,7 +124,7 @@ function nik_pets_PatchTimebomb(bytearr) {
 	
 	// generation begin.
 	let v_firstRandom = (BigInt(Math.round(Math.random() * v_intmax)) << BigInt(32)) | BigInt(Math.round(Math.random() * v_intmax));
-	let v_infoNumber = v_timestamp;
+	let v_infoNumber = BigInt(v_timestamp);
 	// VERY IMPORTANT.
 	if (v_btexemode) {
 		v_infoNumber -= BigInt(1000);
@@ -148,9 +141,9 @@ function nik_pets_PatchTimebomb(bytearr) {
 	  | ((v_temp >> BigInt(16)) & BigInt("0xff00"            ))
 	  | ((v_temp >> BigInt(32)) & BigInt("0xff"              ));
 	v_infoNumber = BigInt(v_temp);
-	v_infoNumber ^= v_firstRandom;
-	v_infoNumber = ~v_infoNumber;
-	v_infoNumber ^= (v_gameid << BigInt(32)) | BigInt(v_gameid);
+	v_infoNumber ^= BigInt(v_firstRandom);
+	v_infoNumber = BigInt(~v_infoNumber);
+	v_infoNumber ^= BigInt(BigInt(BigInt(BigInt(v_gameid) << BigInt(32)) | BigInt(v_gameid)));
 	v_infoNumber ^= BigInt(
 		((v_defwidth  + v_info) << BigInt(48)) |
 		((v_defheight + v_info) << BigInt(32)) |
@@ -241,7 +234,3 @@ function nik_pets_TimeBombPatcherInit() {
 
 // -- the entry point is here -- //
 nik_pets_TimeBombPatcherInit();
-return true;
-
-})();
-

@@ -1,28 +1,21 @@
 // nik_pets_stage2.js
 /****
  * == Rouselle (Stage 2) ==
- * v2.2
+ * v2.3
  * 
- * Last Modified: 22 Mar 2022 (20:45 UTC+5)
+ * Last Modified: 13 Jun 2022 (18:48 UTC+5)
  * 
  * @author Nikita Krapivin <hi.russell@example.com>
  */
 
 "use strict";
 
-(function() { // -- wrap in a function to allow to cancel init (see if below) -- //
-
-if (typeof(nik_pets_Stage2Init) !== "undefined") {
-    console.log("nik_pets_stage2.js: Already initialised.");
-    return false;
-}
-
 // -- only used for old auth flow LOL -- //
 const nik_pets_REPLY = { hash: [ 185, 66, 169, 195, 1, 196, 6, 209, 109, 32, 69, 100, 5, 236, 130, 37, 162, 86, 183, 235 ] };
 const nik_pets_REPLY_PRODUCT = { product: "Opera GX" };
 
 /**
- * A stub sendMessage that does nothing.
+ * A stub chrome.runtime.sendMessage that does nothing.
  * @param {string} idString - id of the extension.
  * @param {object} msgObject - message object.
  * @param {function} responseFunc - answer reply callback.
@@ -38,8 +31,7 @@ if (typeof(chrome.runtime) === "undefined") chrome.runtime = {};
 if (typeof(chrome.runtime.sendMessage) === "undefined") chrome.runtime.sendMessage = nik_pets_Stub;
 
 let nik_pets_Original = chrome.runtime.sendMessage;
-let nik_pets_ReplaceOrig = window.location.replace;
-let nik_pets_Closed = 0;
+let nik_pets_Closed = 0; // 'how many times a close has been requested?'
 
 /**
  * A function that replies to the drm auth.
@@ -72,6 +64,7 @@ function nik_pets_StringToArray(inputString) {
 
 /**
  * Handler for the SHA-1 digest event.
+ * Now even more precise!
  *
  * @param {ArrayBuffer} promiseResultArrayBuffer the SHA-1 hash.
  * @param {function} rpFunction callback into GameMaker.
@@ -79,7 +72,9 @@ function nik_pets_StringToArray(inputString) {
 function nik_pets_Reply2Handler(promiseResultArrayBuffer, rpFunction) {
     console.log("nik_pets_Reply2Handler(): inside a promise... (fuck NFTs and Web3 btw)");
     console.log(promiseResultArrayBuffer);
-    rpFunction({ hash: promiseResultArrayBuffer });
+    // the Opera GX hash callback returns a regular JS array
+    // so let's replicate this thing as precise as possible :)
+    rpFunction({ hash: Array.from(new Uint8Array(promiseResultArrayBuffer)) });
 }
 
 /**
@@ -95,16 +90,6 @@ function nik_pets_Reply2Handler(promiseResultArrayBuffer, rpFunction) {
 function nik_pets_Reply2(rpFunction, inputData) {
 	console.log("nik_pets_Reply2(): Doing new reply stuff...");
 	
-	// are we running in an Opera browser?
-    // -_-
-    /*
-	if (navigator.userAgent.includes("OPR/")) {
-		alert("nik_pets_Reply2(): Opera User-Agent detected.\nPlease see JSDoc comments for this function, thank you.\n\n- Nikita Krapivin.");
-		rpFunction(null); // crash the drm code, will hang the game.
-		return;
-	}
-    */
-	
     window.crypto.subtle.digest("SHA-1", nik_pets_StringToArray(inputData.randomString + "QXyd2ZCu88ec3J0X"))
     .then(nik_pets_res => nik_pets_Reply2Handler(nik_pets_res, rpFunction));
 }
@@ -114,7 +99,7 @@ function nik_pets_Reply2(rpFunction, inputData) {
  * @param {function} rpFunction - Reply callback that gets the answer.
  */
 function nik_pets_ReplyProduct(rpFunction) {
-	console.log("nik_pets_ReplyProduct(): Hi.");
+	console.log("nik_pets_ReplyProduct(): GXC product reply");
 	rpFunction(nik_pets_REPLY_PRODUCT);
 }
 
@@ -147,7 +132,7 @@ function nik_pets_CloseTabHandler() {
  * @param {function} responseFunc - answer reply callback.
  */
 function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
-	// console.log("nik_pets_SendMessageHook(): idString = " + idString);
+	console.log("nik_pets_SendMessageHook(): idString = " + idString);
 	
 	if (idString === "mpojjmidmnpcpopbebmecmjdkdbgdeke") {
 		// console.log("nik_pets_SendMessageHook(): Hooking response.");
@@ -187,7 +172,7 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 		else {
 			console.log("nik_pets_SendMessageHook(): UNKNOWN COMMAND PASSED = " + msgObject.command);
 			console.log(msgObject);
-			alert("[Rouselle]: PLEASE SEE THE BROWSER CONSOLE!");
+			alert("[Rouselle]: Unimplemented Opera GX command, see dev console.");
 			return false;
 		}
 		
@@ -203,44 +188,12 @@ function nik_pets_SendMessageHook(idString, msgObject, responseFunc) {
 }
 
 /**
- * A hook for window location replace.
- * @param {DOMString} domString - the url to navigate to.
- */
-function nik_pets_ReplaceHook(domString) {
-	// DOMString -> string
-	if (domString.toString().includes("https://opera.com/gx")) {
-		// Yo-Kai Watch - Space Dance! below:
-		console.log("bruh begin:");
-		console.log("bongo bongo sh sh sh sh sh");
-		console.log("10000 ppl wanna kick it on mars");
-		console.log("yo yo ppl rap to da beat now");
-		console.log("50000 ppl wanna dance with da stars");
-		console.log("pyon pyon pyon pyon pyon");
-		console.log("20000 ppl eating dumplings afar");
-		console.log("yoisho! yoisho!");
-		console.log("40000 ppl wanna eat moon bars!");
-		alert("DRM bypass fail, please see console for errors.");
-	}
-	else {
-		// navigate just fine:
-		nik_pets_ReplaceOrig(domString);
-	}
-}
-
-/**
  * Initializes the second stage.
  */
 function nik_pets_Stage2Init() {
 	chrome.runtime.sendMessage = nik_pets_SendMessageHook;
-	// TODO: figure out a way to hook window.location.replace:
-	//Object.defineProperty(window.location, 'replace', { value: nik_pets_ReplaceHook, writable: false });
-	//window.location.replace = nik_pets_ReplaceHook;
 	console.log("nik_pets_Stage2Init(): Stage 2 Init.");
 }
 
 // -- the entry point is here -- //
 nik_pets_Stage2Init();
-return true;
-
-})();
-

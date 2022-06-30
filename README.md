@@ -103,12 +103,15 @@ UPD 4: Versions V1.99 and above can close the current game window.
 
 UPD 5: Version V2.00 and above should bypass the new DRM check (2022+).
 
+UPD 6: The new v2.3 update should fix all the bugs relating to load issues.
+
 ## Who?
 
 Credits:
 
-- Nikita Krapivin - funny trolling.
+- Nikita Krapivin - funny trolling and kitties (very nice).
 - Anonymous citizen - an idea for the extension's (old) icon.
+- uglycoal - the new crossed Opera logo icon. <3
 - Opera - destroying their own reputation like I could never do (crypto browser amirite).
 
 ## Post Scriptum
